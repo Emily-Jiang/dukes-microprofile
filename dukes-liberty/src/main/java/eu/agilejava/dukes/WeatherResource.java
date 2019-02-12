@@ -37,6 +37,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 /**
@@ -66,10 +70,23 @@ public class WeatherResource {
     @Metered
     @GET
     @Produces("text/plain")
+    @APIResponses(
+            value = {
+                    @APIResponse(
+                            responseCode = "404",
+                            description = "Missing description",
+                            content = @Content(mediaType = "text/plain")),
+                    @APIResponse(
+                            responseCode = "200",
+                            description = "Retrieve the temperature for a particular location.",
+                            content = @Content(mediaType = "text/plain")) })
+    @Operation(
+            summary = "Get the real-time emperature for the fake zip code",
+            description = "Retrieves the temperature for the specified location ")
     public Response helloWithTemp() {
 
         int temp = getCurrentTemp();
-        return Response.ok("Hello " + dukesZipcode + "!  The current tempature is " + temp + " degrees Fahrenheit!").build();
+        return Response.ok("Hello again " + dukesZipcode + "!  The current tempature is " + temp + " degrees Fahrenheit!").build();
     }
 
 
